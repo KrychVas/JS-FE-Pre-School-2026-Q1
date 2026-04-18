@@ -64,8 +64,8 @@ ul {
 }
 
 .logo__icon {
-    width: 100px;
-    height: 100px;
+    width: 140px;
+    height: 140px;
 }
 
 .logo__icon img {
@@ -692,6 +692,7 @@ ul {
     background-position: center;
     background-size: cover;
     padding-bottom: 80px;
+    border-radius: 20px 20px 0 0;
 }
 
 .gifts-section__garland {
@@ -1340,4 +1341,150 @@ body.no-scroll {
 }
 
 }
+}
+
+/* --- MODAL BASE --- */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(24, 28, 36, 0.8);
+    backdrop-filter: blur(8px);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    padding: 15px;
+}
+
+.modal-overlay.open {
+    display: flex;
+}
+
+.modal-card {
+    position: relative;
+    background: #ffffff;
+    border-radius: 20px;
+    width: 100%;
+    max-width: 400px;
+    padding: 32px; /* Internal padding for text */
+    animation: fadeIn 0.3s ease;
+    overflow: hidden; /* Important for the background breakout */
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.modal-close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    z-index: 10;
+}
+
+/* --- MODAL IMAGE BREAKOUT (The background you asked for) --- */
+.modal-image-wrapper {
+    /* This makes the background fill the whole width of the modal card */
+    width: calc(100% + 64px); 
+    margin: -32px -32px 20px -32px;
+    height: 230px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Specific background colors for each category as per design */
+.modal-image-wrapper--work { background-color: #F1F3FF; }
+.modal-image-wrapper--health { background-color: #F0F9F4; }
+.modal-image-wrapper--harmony { background-color: #FFF1F5; }
+
+.modal-main-img {
+    height: 90%;
+    width: auto;
+    object-fit: contain;
+}
+
+/* --- MODAL TEXT CONTENT --- */
+.modal-text-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-title {
+    font-size: 24px;
+    line-height: 110%;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    margin: 8px 0;
+    color: #181C24;
+}
+
+.modal-description {
+    font-size: 16px;
+    line-height: 150%;
+    margin-bottom: 24px;
+    color: #181C24;
+}
+
+/* --- SNOWFLAKES (The icons you asked for) --- */
+.superpowers-title {
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 14px;
+    margin-bottom: 12px;
+}
+
+.power-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.power-name {
+    text-transform: capitalize;
+    flex-grow: 1;
+}
+
+.power-value {
+    margin-right: 15px;
+}
+
+.power-stars {
+    display: flex;
+    gap: 8px;
+}
+
+.snowflake-icon {
+    width: 16px;
+    height: 16px;
+    /* This magic filter turns the black SVG into the required red color #FF4646 */
+    filter: invert(41%) sepia(90%) saturate(3452%) hue-rotate(338deg) brightness(101%) contrast(101%);
+}
+
+.snowflake-icon--empty {
+    opacity: 0.1; /* Transparent snowflakes for the rating */
+}
+
+/* --- UTILS --- */
+body.no-scroll {
+    overflow: hidden;
+}
+
+/* Color for the active link */
+.nav__link.active {
+    color: #FF4646 !important; /* Forces the red color */
+}
+
+/* Hover effect so user knows it's clickable */
+.nav__link:hover {
+    color: #FF4646;
+    transition: color 0.3s ease;
 }
