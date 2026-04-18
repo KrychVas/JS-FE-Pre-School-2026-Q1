@@ -89,3 +89,50 @@ if (scrollToTopBtn) {
         });
     });
 }
+
+/* --- SLIDER LOGIC --- */
+const sliderTrack = document.querySelector('.slider__track');
+const btnPrev = document.getElementById('sliderPrev');
+const btnNext = document.getElementById('sliderNext');
+
+let currentStep = 0;
+// Max steps: 3 for desktop, 6 for mobile
+const getMaxSteps = () => (window.innerWidth <= 768 ? 6 : 3);
+
+function updateSlider() {
+    const maxSteps = getMaxSteps();
+    
+    // Calculate total width to scroll
+    const scrollWidth = sliderTrack.scrollWidth - sliderTrack.parentElement.clientWidth;
+    const stepWidth = scrollWidth / maxSteps;
+
+    // Apply transformation
+    sliderTrack.style.transform = `translateX(-${currentStep * stepWidth}px)`;
+
+    // Update buttons state
+    btnPrev.disabled = currentStep === 0;
+    btnNext.disabled = currentStep === maxSteps;
+}
+
+if (btnNext && btnPrev) {
+    btnNext.addEventListener('click', () => {
+        if (currentStep < getMaxSteps()) {
+            currentStep++;
+            updateSlider();
+        }
+    });
+
+    btnPrev.addEventListener('click', () => {
+        if (currentStep > 0) {
+            currentStep--;
+            updateSlider();
+        }
+    });
+
+    // Requirement: Reset slider on resize
+    window.addEventListener('resize', () => {
+        currentStep = 0;
+        updateSlider();
+    });
+}
+
