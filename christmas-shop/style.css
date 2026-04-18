@@ -33,7 +33,8 @@ ul {
 
 /* -- PAGE WRAPPER -- */
 .page-wrapper {
-    width: 1440px;
+    max-width: 1440px;
+    width: 100%;
     margin: 0 auto;
     background-color: #ffffff;
     overflow-x: hidden;
@@ -724,7 +725,7 @@ ul {
 .gifts-tabs__btn {
     background-color: transparent;
     color: #ffffff;
-    border: 1px solid rgba(255, 255, 255, 0.5);
+    border: 1px solid transparent;
     padding: 10px 24px;
     border-radius: 20px;
     font-family: 'Montserrat', sans-serif;
@@ -733,15 +734,21 @@ ul {
     letter-spacing: 0.05em;
     text-transform: uppercase;
     cursor: pointer;
-    transition: background-color 0.3s, border-color 0.3s;
+    transition: all 0.3s ease;
 }
 
+.gifts-tabs__btn:hover,
 .gifts-tabs__btn--active {
-    background-color: #ffffff;
-    color: #ff4646;
-    border-color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.5);   
+    color: #ffffff; 
+}
+
+
+.gifts-tabs__btn--active {
     cursor: default;
     pointer-events: none;
+    background-color: rgba(255, 255, 255, 0.2); 
 }
 
 .gifts-section .gifts-grid {
@@ -787,8 +794,8 @@ ul {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 6px;
-    padding: 4px;
+    gap: 8px;   
+    padding: 0;
 }
 
 .burger-btn__line {
@@ -797,11 +804,11 @@ ul {
     height: 2px;
     background-color: #181C24;
     border-radius: 2px;
-    transition: transform 0.3s, opacity 0.3s;
+    transition: transform 0.3s ease, background-color 0.3s;
 }
 
 .burger-btn.open .burger-btn__line:nth-child(1) {
-    transform: translateY(8px) rotate(45deg);
+    transform: translateY(5px) rotate(45deg);
 }
 
 .burger-btn.open .burger-btn__line:nth-child(2) {
@@ -809,7 +816,7 @@ ul {
 }
 
 .burger-btn.open .burger-btn__line:nth-child(3) {
-    transform: translateY(-8px) rotate(-45deg);
+    transform: translateY(-5px) rotate(-45deg);
 }
 
 .nav-mobile {
@@ -836,11 +843,11 @@ ul {
     padding: 12px 40px;
     width: 100%;
     text-align: center;
+    text-decoration: none;
+    display: block;
 }
 
-/* ============================================================
-   HOVER — тільки на desktop
-   ============================================================ */
+/* --HOVER — тільки на desktop-- */
 @media (hover: hover) and (pointer: fine) {
 
     .nav__link:hover:not(.nav__link--active) {
@@ -899,9 +906,7 @@ ul {
     }
 }
 
-/* ============================================================
-   MEDIA — 768px
-   ============================================================ */
+/*-- MEDIA - 768px -- */
 @media (max-width: 768px) {
 
     .page-wrapper {
@@ -1006,11 +1011,14 @@ ul {
         padding-bottom: 40px;
     }
 
+@media (max-width: 768px) {
+    .gifts-section .gifts-grid, 
+    .best-gifts .gifts-grid,
     .gifts-grid {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 12px;
-        padding: 0 20px;
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important; /* РІВНО ДВІ КОЛОНКИ */
+        gap: 12px !important;
+        padding: 0 20px !important;
     }
 
     .gift-card {
@@ -1053,17 +1061,11 @@ ul {
     .gifts-section__title {
         font-size: 24px;
     }
-
-    .gifts-section .gifts-grid {
-        grid-template-columns: repeat(2, 1fr);
-        padding: 0 20px;
-    }
 }
 
-/* ============================================================
-   MEDIA — 380px
-   ============================================================ */
-@media (max-width: 380px) {
+
+/* -- MEDIA - 480px -- */
+@media (max-width: 480px) {
 
     body {
         overflow-x: hidden;
@@ -1208,14 +1210,17 @@ ul {
         padding: 0 16px;
     }
 
+    .gifts-section .gifts-grid, 
+    .best-gifts .gifts-grid,
     .gifts-grid {
-        grid-template-columns: 1fr;
-        padding: 0 16px;
-        gap: 12px;
+        display: grid !important;
+        grid-template-columns: 1fr !important; 
+        padding: 0 16px !important;
     }
 
     .gift-card {
-        width: 100%;
+        width: 100% !important;
+        max-width: none !important;
     }
 
     .cta {
@@ -1264,7 +1269,7 @@ ul {
     .footer__card {
         width: 100%;
         height: auto;
-        padding: 24px 16px;
+        padding: 4px 16px;
     }
 
     .footer__card-main {
@@ -1293,13 +1298,21 @@ ul {
         letter-spacing: 0.08em;
     }
 
-    .gifts-tabs {
-        flex-wrap: wrap;
-        gap: 6px;
-    }
+.gifts-tabs {
+    display: flex;
+    flex-wrap: nowrap; 
+    justify-content: space-between; 
+    gap: 4px; 
+    width: 100%;
+}
 
-    .gifts-section .gifts-grid {
-        grid-template-columns: 1fr;
-        padding: 0 16px;
-    }
+.gifts-tabs__btn {
+    flex: 1; 
+    padding: 10px 4px; 
+    font-size: 10px; 
+    text-align: center;
+    white-space: nowrap; 
+}
+
+}
 }
