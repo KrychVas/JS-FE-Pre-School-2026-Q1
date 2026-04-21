@@ -1,7 +1,10 @@
+/* --- GLOBAL VARIABLES --- */
+let giftsData = [];
+const body = document.body;
+
 /* --- BURGER MENU LOGIC --- */
 const burgerBtn = document.getElementById('burgerBtn');
 const navMobile = document.querySelector('.nav-mobile');
-const body = document.body;
 const navLinks = document.querySelectorAll('.nav-mobile .nav__link');
 
 function toggleMenu() {
@@ -16,6 +19,7 @@ if (burgerBtn) {
     burgerBtn.addEventListener('click', toggleMenu);
 }
 
+// Закриття меню при кліку на посилання
 navLinks.forEach(link => {
     link.addEventListener('click', () => {
         if (navMobile && navMobile.classList.contains('open')) {
@@ -24,18 +28,19 @@ navLinks.forEach(link => {
     });
 });
 
+// Закриття меню при зміні розміру екрану (більше 768px)
 window.addEventListener('resize', () => {
     if (window.innerWidth > 768 && navMobile && navMobile.classList.contains('open')) {
         toggleMenu();
     }
 });
 
-/* --- NAVIGATION ACTIVE STATE LOGIC --- */
+/* --- NAVIGATION ACTIVE STATE & SMOOTH SCROLL --- */
 function initNavigation() {
     const allNavLinks = document.querySelectorAll('.nav__link');
     const currentPath = window.location.pathname;
 
-    // 1. Highlight active page (e.g., Gifts) on load
+    // Підсвітка активної сторінки
     allNavLinks.forEach(link => {
         const href = link.getAttribute('href');
         if (href !== '#' && href !== '' && currentPath.includes(href)) {
@@ -43,11 +48,20 @@ function initNavigation() {
         }
     });
 
-    // 2. Handle clicks for anchor links (About, Best, Contacts)
-    allNavLinks.forEach(link => {
-        link.addEventListener('click', function() {
-            allNavLinks.forEach(l => l.classList.remove('active'));
-            this.classList.add('active');
+    // Плавна прокрутка до якорів
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            const targetId = this.getAttribute('href');
+            if (targetId === '#') return;
+
+            const targetElement = document.querySelector(targetId);
+            if (targetElement) {
+                e.preventDefault();
+                targetElement.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
         });
     });
 }
@@ -62,12 +76,14 @@ function updateTimer() {
     if (!dVal) return;
 
     const now = new Date();
+    // Таймер до Нового року UTC+0
     const nextYear = now.getUTCFullYear() + 1;
     const newYearDate = Date.UTC(nextYear, 0, 1, 0, 0, 0);
     const currentTime = now.getTime();
     const diff = newYearDate - currentTime;
 
     if (diff > 0) {
+        // Початкові нулі не відображаються для одноцифрових чисел
         dVal.textContent = Math.floor(diff / (1000 * 60 * 60 * 24));
         hVal.textContent = Math.floor((diff / (1000 * 60 * 60)) % 24);
         mVal.textContent = Math.floor((diff / (1000 * 60)) % 60);
@@ -80,11 +96,12 @@ if (dVal) {
     updateTimer();
 }
 
-/* --- SCROLL TO TOP LOGIC --- */
-const scrollToTopBtn = document.getElementById('scroll-to-top');
+/* --- SCROLL TO TOP LOGIC (Виправлено для відповідності ТЗ) --- */
+const scrollToTopBtn = document.getElementById('backToTop');
 
 if (scrollToTopBtn) {
     window.addEventListener('scroll', () => {
+        // З'являється ТІЛЬКИ на <=768px ПІСЛЯ 300px скролу
         if (window.innerWidth <= 768 && window.scrollY > 300) {
             scrollToTopBtn.style.display = 'flex';
         } else {
@@ -92,23 +109,26 @@ if (scrollToTopBtn) {
         }
     });
 
-    scrollToTopBtn.addEventListener('click', () => {
+    scrollToTopBtn.addEventListener('click', function() {
         window.scrollTo({ top: 0, behavior: 'smooth' });
+        this.blur(); // Знімаємо фокус, щоб кнопка не залишалася червоною
     });
 }
 
-/* --- SLIDER LOGIC --- */
+/* --- SLIDER LOGIC (Виправлена кількість кроків) --- */
 const sliderTrack = document.querySelector('.slider__track');
 const btnPrev = document.getElementById('sliderPrev');
 const btnNext = document.getElementById('sliderNext');
 
 let currentStep = 0;
+// 3 кліки для десктопа, 6 кліків для мобілок
 const getMaxSteps = () => (window.innerWidth <= 768 ? 6 : 3);
 
 function updateSlider() {
     if (!sliderTrack) return;
     const maxSteps = getMaxSteps();
-    const scrollWidth = sliderTrack.scrollWidth - sliderTrack.parentElement.clientWidth;
+    const containerWidth = sliderTrack.parentElement.clientWidth;
+    const scrollWidth = sliderTrack.scrollWidth - containerWidth;
     const stepWidth = scrollWidth / maxSteps;
 
     sliderTrack.style.transform = `translateX(-${currentStep * stepWidth}px)`;
@@ -116,6 +136,9 @@ function updateSlider() {
     if (btnPrev && btnNext) {
         btnPrev.disabled = currentStep === 0;
         btnNext.disabled = currentStep === maxSteps;
+        // Додатково можна додавати класи для візуального стилю неактивних кнопок
+        btnPrev.classList.toggle('disabled', currentStep === 0);
+        btnNext.classList.toggle('disabled', currentStep === maxSteps);
     }
 }
 
@@ -132,6 +155,7 @@ if (btnNext && btnPrev) {
             updateSlider();
         }
     });
+    // При ресайзі скидаємо у вихідне положення
     window.addEventListener('resize', () => {
         currentStep = 0;
         updateSlider();
@@ -146,6 +170,7 @@ const modalContent = document.querySelector('.modal-content');
 function openModal(gift) {
     const categoryName = gift.category.toLowerCase().split(' ').pop();
     
+    // Функція малювання сніжинок (суперсили)
     const renderSnowflakes = (value) => {
         const count = parseInt(value) / 100;
         let html = '';
@@ -182,42 +207,45 @@ function openModal(gift) {
     `;
     
     modalOverlay.classList.add('open');
-    document.body.classList.add('no-scroll');
+    body.classList.add('no-scroll'); // Блокуємо скрол сторінки
 }
 
 if (modalOverlay) {
     modalClose.addEventListener('click', () => {
         modalOverlay.classList.remove('open');
-        document.body.classList.remove('no-scroll');
+        body.classList.remove('no-scroll');
     });
+    // Закриття при кліку по оверлею
     modalOverlay.addEventListener('click', (e) => {
         if (e.target === modalOverlay) {
             modalOverlay.classList.remove('open');
-            document.body.classList.remove('no-scroll');
+            body.classList.remove('no-scroll');
         }
     });
 }
 
+// Делегування подій для карток подарунків
 document.addEventListener('click', (e) => {
     const card = e.target.closest('.gift-card');
     if (card) {
-        const giftName = card.querySelector('.gift-card__name').textContent.trim();
-        const gift = giftsData.find(g => g.name === giftName);
-        if (gift) openModal(gift);
+        const giftNameElement = card.querySelector('.gift-card__name');
+        if (giftNameElement) {
+            const giftName = giftNameElement.textContent.trim();
+            const gift = giftsData.find(g => g.name === giftName);
+            if (gift) openModal(gift);
+        }
     }
 });
 
 /* --- GIFTS DATA & FILTER LOGIC --- */
-let giftsData = [];
-
 async function loadGifts() {
     try {
         const response = await fetch('./gifts.json');
         giftsData = await response.json();
 
-        if (document.body.classList.contains('index-page')) {
-            renderRandomGifts();
-        } else if (document.body.classList.contains('gifts-page')) {
+        if (body.classList.contains('index-page')) {
+            renderRandomGifts(); // 4 випадкові картки для головної
+        } else if (body.classList.contains('gifts-page')) {
             renderAllGifts();
             initFilters();
         }
