@@ -95,6 +95,40 @@ section p, section ul {
 ul { list-style: none; }
 li { margin-bottom: 0.5rem; }
 
+.featured-project {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+    margin-bottom: 40px;
+}
+
+.featured-project img {
+    width: 250px;
+    height: auto;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s ease;
+}
+
+.featured-project img:hover {
+    transform: scale(1.02);
+}
+
+.featured-project-details {
+    width: 100%;
+}
+
+.featured-project-title {
+    margin: 0 0 10px 0;
+    font-size: 1.4rem;
+}
+
+.featured-project-description {
+    margin-bottom: 10px;
+    max-width: 600px;
+}
+
 pre {
     background: #1e1e1e;
     color: #d4d4d4;
